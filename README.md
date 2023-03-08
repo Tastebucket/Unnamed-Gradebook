@@ -17,6 +17,7 @@ As a user (teacher), I would like to be able to:
 - Add students to a class
 - Enter grades in a student's assignment
 - Mark a student's assignment as missing
+---
 As a user (student), I would like to be able to:
 - Create an Account
 - Login/logout of my account
@@ -36,4 +37,8 @@ As a user (student), I would like to be able to:
 ## ERDs
 ---
 
-![ERDs](img/ERD.png)
+![ERDs](img/Gradebook-ERD.png)
+
+---
+## Route Tables
+---
