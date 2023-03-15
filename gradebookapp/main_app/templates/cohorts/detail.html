@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h1>Happy Birthday</h1>
-    <div class="row">
+    <h1>{{cohort.title}}</h1>
+    <div class="row" style="margin-bottom: 10px;">
         <div class="col s1">Students</div>
         {% for assignment in cohort.assignment_set.all %}
            <a href="{% url 'assignments_update' assignment.id %}">

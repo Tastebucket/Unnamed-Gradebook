@@ -1,4 +1,14 @@
 body {
-    background-color: purple;
+    background-color: rgb(235, 147, 235);
 }
+
+.col {
+    height: 80px;
+}
+
+.row {
+    margin: 0;
+}
+
+
   
