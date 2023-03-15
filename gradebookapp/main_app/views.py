@@ -26,6 +26,26 @@ def cohorts_detail(request, cohort_id):
   grades = Grade.objects.all()
   grade_ids =Grade.objects.all().values_list('assignment', flat=True)
   grade_studs =Grade.objects.all().values_list('student', flat=True)
+  final_grades=[]
+  other_students = Student.objects.exclude(classes=cohort)
+  for i in range(len(student_ids)):
+    sum_grade=0
+    sum_weight=0
+    all_grades=Grade.objects.filter(student = student_ids[i])
+    print(f'{all_grades}')
+    for j in range(len(all_grades)):
+      if all_grades[j].score != None:
+        assignment=Assignment.objects.get(id=all_grades[j].assignment.id)
+        weight = assignment.weight
+        print(f"This is the weight {weight}")
+        sum_weight+=weight
+        score=all_grades[j].score
+        print(f"This is the score {score}")
+        sum_grade+=(weight*score)
+    if sum_weight != 0:
+      avg= sum_grade/sum_weight
+      final_grades.append((avg, student_ids[i]))
+  print(f"These are the tuples of our lives {final_grades}")
   grade_tuples=[]
   for i in range(len(grades)):
     grade_tuples.append((grade_ids[i], grade_studs[i]))
@@ -40,7 +60,7 @@ def cohorts_detail(request, cohort_id):
     if other_tuples[i] not in grade_tuples:
       new_tuples.append(other_tuples[i])
   return render(request, 'cohorts/detail.html', {
-    'cohort': cohort, 'students': students, 'grades':grades, 'grade_form':grade_form, 'new_tuples':new_tuples
+    'cohort': cohort, 'students': students, 'grades':grades, 'grade_form':grade_form, 'new_tuples':new_tuples, 'final_grades': final_grades, 'other_students': other_students
     })
 
 def add_score(request, assignment_id, student_id, cohort_id):
@@ -90,6 +110,10 @@ class CohortUpdate(LoginRequiredMixin,UpdateView):
 class CohortDelete(LoginRequiredMixin,DeleteView):
   model = Cohort
   success_url = '/cohorts'
+
+def assoc_student(request, cohort_id, student_id):
+    Student.objects.get(id=student_id).classes.add(cohort_id)
+    return redirect('detail', cohort_id=cohort_id)
 
 class AssignmentCreate(LoginRequiredMixin,CreateView):
   model = Assignment

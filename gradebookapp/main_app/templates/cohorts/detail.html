@@ -2,19 +2,20 @@
 {% block content %}
     <h1>{{cohort.title}}</h1>
     <div class="row" style="margin-bottom: 10px;">
-        <div class="col s1">Students</div>
+        <div class="col s1"><p>Students</p></div>
         {% for assignment in cohort.assignment_set.all %}
            <a href="{% url 'assignments_update' assignment.id %}">
-            <div class="col s1">{{ assignment.name }}</div>
+            <div class="col s2" style="border: 2px solid black; display: flex; align-items: flex-start; flex-direction: column;"><p style="font-weight: bold;margin: 0;color: black;">{{ assignment.name }}</p><p style="margin: 0;">Weight: {{assignment.weight}}</p></div>
            </a>
         {% endfor %}
+        <div class="col s1"><p>Final Grade</p></div>
     </div>
     {% for student in students %}
         <div class="row">
             <div class="col s1">{{student.name}}</div>
             {% for assignment in cohort.assignment_set.all %}
 
-                <div class="col s1" style="border: 2px solid black;">
+                <div class="col s2" style="border: 2px solid black;">
                     {%for tuple in new_tuples%}
                         {% if tuple.0 == assignment.id and tuple.1 == student.id %}
                             <form action="{% url 'add_score' cohort.id assignment.id student.id %}" method="POST">
@@ -31,10 +32,37 @@
                     {% endfor %}
                 </div>
             {% endfor %}
+            {% for tuple in final_grades %}
+                {% if tuple.1 == student.id %}
+                <div class="col s1"><h6>{{tuple.0}}</h6></div>
+                {%endif%}
+            {% endfor %}
         </div>
     {% endfor %}
     <div class="card-action">
-        <a href="{% url 'assign_form' cohort.id %}">Add Assignment</a>
-        <a href="{% url 'cohorts_update' cohort.id %}">Edit Class</a>
+        <button><a href="{% url 'assign_form' cohort.id %}">Add Assignment</a></button>
+        <button><a href="{% url 'cohorts_update' cohort.id %}">Edit Class</a></button>
+    </div>
+    <div>
+        <h3>Students not enrolled in this Class</h3>
+        {% if other_students.count %}
+        <div class="card-container">
+            {% for student in other_students %}
+                <div class="card student-card">
+                    <div class="card-content">
+                        <span class="card-title">
+                            {{student.name}}
+                        </span>
+                    </div>
+                    <div class="card-action">
+                        <form action="{% url 'assoc_student' cohort.id student.id %}" method="POST">
+                            {% csrf_token %}
+                            <input type="submit" class="btn" value="Add to Class">
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
     </div>
 {% endblock %}

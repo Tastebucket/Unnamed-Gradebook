@@ -9,8 +9,8 @@
             </span>
         </div>
         <div class="card-action">
-            <a class="btn" href="{% url 'assignments_update' cohort.id assignment.id %}">Edit</a>
-            <a class="btn red" href="{% url 'assignments_delete' cohort.id assignment.id %}">Delete</a>
+            <a class="btn" href="{% url 'assignments_update' assignment.id %}">Edit</a>
+            <a class="btn red" href="{% url 'assignments_delete' assignment.id %}">Delete</a>
         </div>
     </div>
 {% endblock %}

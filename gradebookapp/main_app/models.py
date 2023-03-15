@@ -8,7 +8,7 @@ class Cohort(models.Model):
     title = models.CharField(max_length=100)
     term = models.CharField(max_length=100)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    
+
     def __str__(self):
         return f"Name: {self.title}, {self.term}"
     def get_absolute_url(self):
@@ -24,7 +24,7 @@ class Assignment(models.Model):
     def __str__(self):
         return f"Name: {self.name}, Due: {self.duedate}"
     def get_absolute_url(self):
-        return reverse('')
+        return reverse('assignments_detail', kwargs={'pk': self.id})
 
 class Student(models.Model):
     name = models.TextField(max_length=100)
@@ -32,10 +32,13 @@ class Student(models.Model):
     classes = models.ManyToManyField(Cohort)
     assignments = models.ManyToManyField(Assignment, through='Grade')
     def __str__(self):
-        return f"Name: {self.name}"
+        return f"{self.name}"
     
 class Grade(models.Model):
     score = models.IntegerField(blank=True, null=True)
     completed = models.BooleanField(null=True)
     assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"student: {self.student} assignment:{self.assignment.name}"
