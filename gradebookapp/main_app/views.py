@@ -56,6 +56,11 @@ def add_score(request, assignment_id, student_id, cohort_id):
     new_grade.save()
   return redirect('detail', cohort_id=cohort_id)
 
+def assign_form(request, cohort_id):
+  cohort =  Cohort.objects.get(id=cohort_id)
+  assignment_form = AssignmentForm()
+  return render(request, 'assignments/form.html', {'cohort':cohort, 'assignment_form':assignment_form})
+
 def add_assignment(request, cohort_id):
   # Baby step
   form = AssignmentForm(request.POST)

@@ -9,4 +9,4 @@ class GradeForm(ModelForm):
 class AssignmentForm(ModelForm):
   class Meta:
     model = Assignment
-    fields = "__all__"
+    fields = '__all__'

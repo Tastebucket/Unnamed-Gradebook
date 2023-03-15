@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col s1">Students</div>
         {% for assignment in cohort.assignment_set.all %}
-           <a href="{% url 'assignments_create'%}">
+           <a href="{% url 'assignments_update' assignment.id %}">
             <div class="col s1">{{ assignment.name }}</div>
            </a>
         {% endfor %}
@@ -34,7 +34,7 @@
         </div>
     {% endfor %}
     <div class="card-action">
-        <a href="{% url 'assignments_create' %}">Add Assignment</a>
+        <a href="{% url 'assign_form' cohort.id %}">Add Assignment</a>
         <a href="{% url 'cohorts_update' cohort.id %}">Edit Class</a>
     </div>
 {% endblock %}

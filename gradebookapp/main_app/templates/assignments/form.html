@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>Assignment Create</h1>
+
+    <div class="card">
+        <form action="{% url 'add_assignment' cohort.id %}" method="POST">
+            {% csrf_token %}
+            <!-- Render the inputs -->
+            {{ assignment_form.as_p }}
+            <input type="submit" class="btn" value="Add Assignment">
+        </form>
+    </div>
+{% endblock %}
