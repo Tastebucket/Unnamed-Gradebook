@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
     <h1>Happy Birthday</h1>
-    <h1>{{new_tuples}}</h1>
     <div class="row">
         <div class="col s1">Students</div>
         {% for assignment in cohort.assignment_set.all %}

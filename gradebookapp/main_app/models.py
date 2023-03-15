@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 # Create your models here.
 class Cohort(models.Model):
@@ -7,6 +8,8 @@ class Cohort(models.Model):
     
     def __str__(self):
         return f"Name: {self.title}, {self.term}"
+    def get_absolute_url(self):
+        return reverse('detail', kwargs={'cohort_id': self.id})
 
 class Assignment(models.Model):
     cohort = models.ForeignKey(Cohort, on_delete=models.CASCADE)

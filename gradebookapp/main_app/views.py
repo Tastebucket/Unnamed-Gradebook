@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .models import Cohort, Assignment, Student, Grade
 from .forms import GradeForm
 
@@ -33,7 +34,7 @@ def cohorts_detail(request, cohort_id):
     if other_tuples[i] not in grade_tuples:
       new_tuples.append(other_tuples[i])
   return render(request, 'cohorts/detail.html', {
-    'cohort': cohort, 'students': students, 'grades':grades, 'grade_form':grade_form, 'grade_ids': grade_ids, 'grade_studs': grade_studs, 'new_tuples':new_tuples
+    'cohort': cohort, 'students': students, 'grades':grades, 'grade_form':grade_form, 'new_tuples':new_tuples
     })
 
 def add_score(request, assignment_id, student_id, cohort_id):
@@ -48,3 +49,15 @@ def add_score(request, assignment_id, student_id, cohort_id):
     new_grade.student_id = student_id
     new_grade.save()
   return redirect('detail', cohort_id=cohort_id)
+
+class CohortCreate(CreateView):
+  model = Cohort
+  fields = '__all__'
+
+class CohortUpdate(UpdateView):
+  model = Cohort
+  fields = ['term']
+
+class CohortDelete(DeleteView):
+  model = Cohort
+  success_url = '/cohorts'
