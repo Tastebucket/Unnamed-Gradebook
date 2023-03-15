@@ -2,7 +2,7 @@
 {% block content %}
     <h1>{{cohort.title}}</h1>
     <div class="row" style="margin-bottom: 10px;">
-        <div class="col s1"><p>Students</p></div>
+        <div class="col s1"><p style="font-weight: bold;">Students</p></div>
         {% for assignment in cohort.assignment_set.all %}
            <a href="{% url 'assignments_update' assignment.id %}">
             <div class="col s2" style="border: 2px solid black; display: flex; align-items: flex-start; flex-direction: column;"><p style="font-weight: bold;margin: 0;color: black;">{{ assignment.name }}</p><p style="margin: 0;">Weight: {{assignment.weight}}</p></div>
