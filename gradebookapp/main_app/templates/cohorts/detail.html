@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
     <h1>Happy Birthday</h1>
+    <h1>{{new_tuples}}</h1>
     <div class="row">
         <div class="col s1">Students</div>
         {% for assignment in cohort.assignment_set.all %}
@@ -11,19 +12,23 @@
         <div class="row">
             <div class="col s1">{{student.name}}</div>
             {% for assignment in cohort.assignment_set.all %}
-                {% for grade in grades %}
-                    {% if grade.assignment.id == assignment.id and grade.student.id == student.id and grade.score %}
-                        <div class="col s1">{{grade.score}}</div>
-                    {% elif grade.assignment.id == assignment.id and grade.student.id == student.id and grade.score == None %}
-                        <div class="col s1">
-                            <form action="{% url 'add_score' grade.id cohort.id %}" method="POST">
-                            {% csrf_token %}
-                            <!-- Render the inputs -->
-                            {{ grade_form.as_table }}
+
+                <div class="col s1" style="border: 2px solid black;">
+                    {%for tuple in new_tuples%}
+                        {% if tuple.0 == assignment.id and tuple.1 == student.id %}
+                            <form action="{% url 'add_score' cohort.id assignment.id student.id %}" method="POST">
+                                {% csrf_token %}
+                                <!-- Render the inputs -->
+                                {{ grade_form.as_table }}
                             </form>
-                        </div>
-                    {% endif %}
-                {% endfor %}
+                        {%endif%}
+                    {%endfor%}
+                    {% for grade in grades %}
+                        {% if grade.assignment.id == assignment.id and grade.student.id == student.id %}
+                            {{grade.score}}
+                        {% endif %}
+                    {% endfor %}
+                </div>
             {% endfor %}
         </div>
     {% endfor %}

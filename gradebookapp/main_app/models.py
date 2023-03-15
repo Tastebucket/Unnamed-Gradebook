@@ -28,6 +28,6 @@ class Student(models.Model):
     
 class Grade(models.Model):
     score = models.IntegerField(blank=True, null=True)
-    completed = models.BooleanField()
+    completed = models.BooleanField(null=True)
     assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)

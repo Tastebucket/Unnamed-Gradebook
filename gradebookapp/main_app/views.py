@@ -15,13 +15,28 @@ def cohorts_index(request):
 def cohorts_detail(request, cohort_id):
   cohort = Cohort.objects.get(id=cohort_id)
   students = Student.objects.filter(classes= cohort)
+  student_ids = Student.objects.filter(classes= cohort).values_list('id', flat=True)
   grades = Grade.objects.all()
+  grade_ids =Grade.objects.all().values_list('assignment', flat=True)
+  grade_studs =Grade.objects.all().values_list('student', flat=True)
+  grade_tuples=[]
+  for i in range(len(grades)):
+    grade_tuples.append((grade_ids[i], grade_studs[i]))
   grade_form = GradeForm()
+  assignment_ids = Assignment.objects.filter(cohort= cohort).values_list('id', flat=True)
+  other_tuples=[]
+  for i in range(len(students)):
+    for j in range(len(assignment_ids)):
+      other_tuples.append((assignment_ids[j], student_ids[i]))
+  new_tuples=[]
+  for i in range(len(other_tuples)):
+    if other_tuples[i] not in grade_tuples:
+      new_tuples.append(other_tuples[i])
   return render(request, 'cohorts/detail.html', {
-    'cohort': cohort, 'students': students, 'grades':grades, 'grade_form':grade_form
+    'cohort': cohort, 'students': students, 'grades':grades, 'grade_form':grade_form, 'grade_ids': grade_ids, 'grade_studs': grade_studs, 'new_tuples':new_tuples
     })
 
-def add_score(request, grade_id, cohort_id):
+def add_score(request, assignment_id, student_id, cohort_id):
   # Baby step
   form = GradeForm(request.POST)
   # validate the form
@@ -29,6 +44,7 @@ def add_score(request, grade_id, cohort_id):
     # don't save the form to the db until it
     # has the cat_id assigned
     new_grade = form.save(commit=False)
-    new_grade.grade_id = grade_id
+    new_grade.assignment_id = assignment_id
+    new_grade.student_id = student_id
     new_grade.save()
   return redirect('detail', cohort_id=cohort_id)
